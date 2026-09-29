@@ -383,7 +383,7 @@ select option{background:#fff;}
       <div class="hdr-title">하루 루틴</div>
       <div class="today-chip"><div class="g-dot"></div><span id="todayBadge">오늘</span></div>
     </div>
-    <div style="text-align:right;padding-top:4px;font-size:10px;color:#aaa;line-height:1.7" id="dateLabel"></div>
+    <div style="text-align:right"><div style="padding-top:4px;font-size:10px;color:#aaa;line-height:1.7" id="dateLabel"></div><button onclick="exportForMove()" style="margin-top:6px;background:#1a1a2e;color:#fff;border:none;font-size:10px;font-weight:700;padding:4px 9px;border-radius:8px;cursor:pointer">📦 이사용 복사</button></div>
   </div>
   <div class="mtabs">
     <button class="mtab on"  onclick="switchMain('schedule')">SCHEDULE</button>
@@ -2071,6 +2071,16 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   });
+}
+
+// ══════ 새 앱으로 이사: 데이터 복사 ══════
+function exportForMove(){
+  const keys=["done_v6","bloodLog_v6","water_v6","schedules_v6","memos_v6","anniversaries_v6","ledger_v1","reItems_v1","invHoldings_v1","trades_v1","savings_v1","deposits_v1"];
+  const o={};keys.forEach(k=>{const v=localStorage.getItem(k);if(v!=null)o[k]=v;});
+  const txt=JSON.stringify(o);
+  const done=()=>alert("복사 완료! ("+Object.keys(o).length+"개 항목)\n새 하루 루틴 앱 → ⇅ 데이터 → 붙여넣기 → 가져오기");
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(()=>prompt("아래 내용을 전체 복사하세요",txt));}
+  else prompt("아래 내용을 전체 복사하세요",txt);
 }
 </script>
 </body>
